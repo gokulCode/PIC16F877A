@@ -1,0 +1,79 @@
+#define FORWARD 0
+#define REVERSE 1
+#define STOP    2
+#define LEFT    3
+#define RIGHT   4
+
+#define LEFT_MOTOR_P  RB0  
+#define LEFT_MOTOR_N  RB1  
+#define RIGHT_MOTOR_P RB2  
+#define RIGHT_MOTOR_N RB3  
+
+#define LEFT_MOTOR_P_dir  TRISB0
+#define LEFT_MOTOR_N_dir  TRISB1
+#define RIGHT_MOTOR_P_dir TRISB2
+#define RIGHT_MOTOR_N_dir TRISB3
+
+
+/* FUNCTIONS
+
+   1.MOTOR_OPERATION(int side,int oper);
+   2.ROBOT_DIRECETION(int dir);
+
+*/
+
+void ROBOT_BEGIN(){
+    LEFT_MOTOR_P_dir  = OUTPUT;
+    LEFT_MOTOR_N_dir  = OUTPUT;
+    RIGHT_MOTOR_P_dir = OUTPUT;
+    RIGHT_MOTOR_N_dir = OUTPUT;
+}
+
+void MOTOR_OPERATION(int side,int oper){
+	if (side == RIGHT) {
+		if (oper == FORWARD){
+			RIGHT_MOTOR_P = RELAY_ON;
+			RIGHT_MOTOR_N = RELAY_OFF;
+		}else if (oper == REVERSE){
+			RIGHT_MOTOR_P = RELAY_OFF;
+			RIGHT_MOTOR_N = RELAY_ON;
+		}else{
+			RIGHT_MOTOR_P = RELAY_OFF;
+			RIGHT_MOTOR_N = RELAY_OFF;
+		}	
+	}else{
+	    if (oper == FORWARD){
+			LEFT_MOTOR_P = RELAY_ON;
+			LEFT_MOTOR_N = RELAY_OFF;
+		}else if (oper == REVERSE){
+			LEFT_MOTOR_P = RELAY_OFF;
+			LEFT_MOTOR_N = RELAY_ON;
+		}else{
+			LEFT_MOTOR_P = RELAY_OFF;
+			LEFT_MOTOR_N = RELAY_OFF;
+		}	
+	}
+}
+
+void ROBOT_DIRECETION(int dir){
+	if(dir == LEFT){
+		MOTOR_OPERATION(LEFT,REVERSE);
+		MOTOR_OPERATION(RIGHT,FORWARD);
+	}
+	if(dir == RIGHT){
+		MOTOR_OPERATION(LEFT,FORWARD);
+		MOTOR_OPERATION(RIGHT,REVERSE);
+	}
+	if(dir == FORWARD){
+		MOTOR_OPERATION(LEFT,FORWARD);
+		MOTOR_OPERATION(RIGHT,FORWARD);
+	}
+	if(dir == REVERSE){
+		MOTOR_OPERATION(LEFT,REVERSE);
+		MOTOR_OPERATION(RIGHT,REVERSE);
+	}
+	if(dir == STOP){
+		MOTOR_OPERATION(LEFT,STOP);
+		MOTOR_OPERATION(RIGHT,STOP);
+	}
+}
